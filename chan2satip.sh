@@ -1,18 +1,35 @@
 #!/bin/bash
 
+# input and output filenames
+INFILENAME=S19.2E_short.conf
+OUTFILENAME=chan_iptv.conf
+
+# SAT>IP server configuration
 IP=192.168.168.37
+
+
+# DVB-S satellite string to sources number
+DVBS_SOURCE1=S19.2E
+DVBS_SOURCE2=S23.5E
+DVBS_SOURCE3a=S28.5E
+DVBS_SOURCE3b=S28.2E
+DVBS_SOURCE4=S13.0E
+
+# ? 
 COUNT=10
 EPAR=1
 
 IFS=":"
 
-rm chan_iptv.conf
+if [ -f $OUTFILENAME ]; then
+    rm $OUTFILENAME
+fi
 
 while read NAME FREQ PAR SRC SR VPID APID TPID CAID SID NID TID RID
 do
     if [ M$NAME == M ]
     then
-	echo ":$FREQ" >> chan_iptv.conf
+	echo ":$FREQ" >> $OUTFILENAME 
 	continue
     fi
     echo Name:$NAME Freq:$FREQ Par:$PAR Src:$SRC SR:$SR VPid:$VPID APid:$APID TPid:$TPID CAid:$CAID SID:$SID NID:$NID TID:$TID RID:$RID
@@ -22,10 +39,16 @@ do
 
 
     case $SRC in
-	S19.2E )
+	$DVBS_SOURCE1 )
 	    src=1 ;;
-	S13.0E )
+	$DVBS_SOURCE2 )
 	    src=2 ;;
+	$DVBS_SOURCE3a )
+	    src=3 ;;
+	$DVBS_SOURCE3b )
+	    src=3 ;;
+	$DVBS_SOURCE4 )
+	    src=4 ;;
     esac
     
 
@@ -40,11 +63,11 @@ do
 
 	    case $KEY in
 		H )
-	    	    pol=h ;;
+	    	pol=h ;;
 		V )
 		    pol=v ;;
 		O )
-    		    ro=$NUM ;;
+    		ro=$NUM ;;
 		M )
 		    case $NUM in
 			2 )
@@ -81,6 +104,14 @@ do
 			msys=dvbs2
 		    fi 
 		    ;;
+		T )
+			if [ $NUM == 8 ]
+		    then
+			msys=dvbt
+		    else
+			msys=dvbt2
+		    fi 
+		    ;;
 		C )
 		    fec=$NUM ;;
 	    esac
@@ -103,13 +134,17 @@ do
 
 #    PAR=`echo "S=1|P=1|F=HTTP|U=192.168.168.37/%3Fsrc=$src%26freq=$freq%26pol=$pol%26ro=$ro%26mtype=$mtype%26msys=$msys%26sr=$sr%26fec=$fec%26pids=$pids|A=80"`
 #    PAR=`echo "S=1|P=1|F=HTTP|U=192.168.168.37/?src=$src&freq=$freq&pol=$pol&ro=$ro&mtype=$mtype&msys=$msys&sr=$sr&fec=$fec&pids=$pids|A=80"`
-    PAR=`echo "S=1|P=1|F=CURL|U=http%3A//${IP}/?src=$src&freq=$freq&pol=$pol&ro=$ro&mtype=$mtype&msys=$msys&sr=$sr&fec=$fec&pids=$pids|A=$APAR"`
+#    PAR=`echo "S=1|P=1|F=CURL|U=http%3A//${IP}/?src=$src&freq=$freq&pol=$pol&ro=$ro&mtype=$mtype&msys=$msys&sr=$sr&fec=$fec&pids=$pids|A=$APAR"`
+    PAR=`echo "http%3A//${IP}/?src=$src&freq=$freq&pol=$pol&ro=$ro&mtype=$mtype&msys=$msys&sr=$sr&fec=$fec&pids=$pids"`
+
     FREQ=$COUNT
 
     COUNT=`expr $COUNT + 10` 
     APAR=`expr $APAR + 1` 
-    echo ${NAME}:${FREQ}:${PAR}:${SRC}:${SR}:${VPID}:${APID}:${TPID}:${CAID}:${SID}:${NID}:${TID}:${RID} >> chan_iptv.conf
+    #echo ${NAME}:${FREQ}:${PAR}:${SRC}:${SR}:${VPID}:${APID}:${TPID}:${CAID}:${SID}:${NID}:${TID}:${RID} >> $OUTFILENAME 
+	#echo ${NAME}:${FREQ}:${PAR}:${SRC}:${SR}:${VPID}:${APID}:${TPID}:${CAID}:${SID}:${NID}:${TID}:${RID} >> $OUTFILENAME 
+	echo -e "#${NAME}\n${PAR}">> $OUTFILENAME
 #exit
 
-done<chan_dvbs.conf
+done<$INFILENAME 
 
