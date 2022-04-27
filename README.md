@@ -1,3 +1,3 @@
 # chan2satip
 #
-# work in progress,...
+mod for triax tss400 dlna playlist
