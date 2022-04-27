@@ -2,7 +2,7 @@
 
 # input and output filenames
 INFILENAME=S19.2E_short.conf
-OUTFILENAME=chan_satip_xml.conf
+OUTFILENAME=chan_satip_xml.xml
 
 # SAT>IP server configuration
 #IP=192.168.1.1.113
@@ -164,4 +164,4 @@ numer=$(("numer+1"))
 #exit
 
 done<$INFILENAME 
-echo "</channelTable>" >> $INFILENAME
+echo "</channelTable>" >> $OUTFILENAME
