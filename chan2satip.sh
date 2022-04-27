@@ -2,10 +2,10 @@
 
 # input and output filenames
 INFILENAME=S19.2E_short.conf
-OUTFILENAME=chan_iptv.conf
+OUTFILENAME=chan_satip_xml.conf
 
 # SAT>IP server configuration
-IP=192.168.168.37
+#IP=192.168.1.1.113
 
 
 # DVB-S satellite string to sources number
@@ -132,7 +132,12 @@ do
 
     done<par.txt
     rm -f par.txt
-
+if [ M$NAME == M ]
+numer=$(("numer+1"))
+    then
+    echo "<channel number=\""$numer"\"><tuneType>DVB-S-AUTO</tuneType><visible>true</visible><type>tv</type><name>${NAME}</name><freq>${FREQ}</freq><pol>$pol</pol><sr>${SR}</sr><src>1</src><pids>${VPID},${APID}</pids></channel>" >> chan_sat_ip.xml
+	continue
+    fi
     pids=`echo "0,18,"$VPID";"$APID","$TPID | sed 's/[,;]/\n/g' | awk -F"=" '{print $1}' | awk '{if(NR>1)printf",%s",$1; else printf"%s",$1}END{printf"\n"}'` 
 #    echo $APID | sed 's/[,;]/\n/g'
 
@@ -159,4 +164,4 @@ do
 #exit
 
 done<$INFILENAME 
-
+echo "</channelTable>" >> $INFILENAME
