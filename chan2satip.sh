@@ -6,29 +6,27 @@ OUTFILENAME=chan_sat_ip_xml.xml
 
 # SAT>IP server configuration
 #IP=192.168.1.1.113
+P1=
+P1a=
+P1b=
+P1c=
+P1d=
+P2=S23.5E
+P2a=S23.5E
+P2b=S23.5E
+P2c=S23.5E
+P2d=S23.5E
+P3=S28.5E
+P3a=S28.5E
+P3b=S19.2E
+P3c=S28.5E
+P3d=S28.5E
+P4=S13.0E
+P4a=S13.0E
+P4b=S13.0E
+P4c=S13.0E
+P4d=S13.0E
 
-
-# DVB-S satellite string to sources number
-DVBS_SOURCE1=S19.2E	#1 if one
-DVBS_SOURCE1a=S19.2E		#1a
-DVBS_SOURCE1b=S19.2E
-DVBS_SOURCE1c=S19.2E
-DVBS_SOURCE1d=S19.2E
-DVBS_SOURCE2=S23.5E	#2 if one
-DVBS_SOURCE2a=S23.5E
-DVBS_SOURCE2b=S23.5E		#2b
-DVBS_SOURCE2c=S23.5E
-DVBS_SOURCE2d=S23.5E
-DVBS_SOURCE3=S28.5E	#3 if one
-DVBS_SOURCE3a=S28.5E
-DVBS_SOURCE3b=S28.5E
-DVBS_SOURCE3c=S28.5E
-DVBS_SOURCE3d=S28.5E		#3c
-DVBS_SOURCE4=S13.0E	#4 if one
-DVBS_SOURCE4a=S13.0E
-DVBS_SOURCE4b=S13.0E
-DVBS_SOURCE4c=S13.0E
-DVBS_SOURCE4d=S13.0E		#4d
 
 # ? 
 COUNT=10
@@ -52,38 +50,17 @@ do
     freq=$FREQ 
     sr=$SR
 
-        declare -a Pos1
-		Pos1=(1 1a 1b 1c 1d)
-    	declare -a Src
-		Src1=1
-		declare -a Pos2
-		Pos2=(2 2a 2b 2c 2d)
-    	declare -a Src
-		Src2=2
-		declare -a Pos3
-		Pos3=(3 3a 3b 3c 3d)
-    	declare -a Src
-		Src3=3
-		declare -a Pos4
-		Pos4=(4 4a 4b 4c 4d)
-    	declare -a Src4
-		Src4=4
     case $SRC in
-	$DVBS_SOURCE$Pos1 )
-	    src=$Src1 ;;
+	$P1|$P1a|$P1b|$P1c|$P1d )
+	    src=1 ;;
+	$P2|$P2a|$P2b|$P2c|$P2d )
+	    src=2 ;;
+	$P3|$P3a|$P3b|$P3c|$P3d )
+	    src=3 ;;
+	$P4|$P4a|$P4b|$P4c|$P4d )
+	    src=3 ;;
     esac
-    case $SRC in
-	$DVBS_SOURCE$Pos2 )
-	    src=$Src2 ;;
-    esac
-    case $SRC in
-	$DVBS_SOURCE$Pos3 )
-	    src=$Src3 ;;
-    esac
-    case $SRC in
-	$DVBS_SOURCE$Pos4 )
-	    src=$Src4 ;;
-    esac
+
 
     echo $PAR | sed 's/\([A-Z]\)/\n\1/g' > par.txt
     while read P
@@ -156,15 +133,18 @@ do
 if [ M$NAME == M ]
 numer=$(("numer+1"))
     then
-    echo "<channel number=\""$numer"\"><tuneType>DVB-S-AUTO</tuneType><visible>true</visible><type>tv</type><name>${NAME}</name><freq>${FREQ}</freq><pol>$pol</pol><sr>${SR}</sr><src>1</src><pids>${VPID},${APID}</pids></channel>" >> $OUTFILENAME
+    # DVB-S satellite string to sources number
+
+
+    echo "<channel number=\""$numer"\"><tuneType>DVB-S-AUTO</tuneType><visible>true</visible><type>tv</type><name>${NAME}</name><freq>${FREQ}</freq><pol>$pol</pol><sr>${SR}</sr><src>$src</src><pids>${VPID},${APID}</pids></channel>" >> $OUTFILENAME
 	continue
     fi
-    pids=`echo "0,18,"$VPID";"$APID","$TPID | sed 's/[,;]/\n/g' | awk -F"=" '{print $1}' | awk '{if(NR>1)printf",%s",$1; else printf"%s",$1}END{printf"\n"}'` 
+    #pids=`echo ""$VPID";"$APID" | sed 's/[,;]/\n/g' | awk -F"=" '{print $1}' | awk '{if(NR>1)printf",%s",$1; else printf"%s",$1}END{printf"\n"}'`
 #    echo $APID | sed 's/[,;]/\n/g'
 
 #    echo src=$src freq=$freq pol=$pol ro=$ro mtype=$mtype msys=$msys sr=$sr fec=$fec pids=$pids
 
-    echo "$NAME http://${IP}/?src=$src\&freq=$freq\&pol=$pol\&ro=$ro\&mtype=$mtype\&msys=$msys\&sr=$sr\&fec=$fec\&pids=$pids"
+   # echo "$NAME http://${IP}/?src=$src\&freq=$freq\&pol=$pol\&ro=$ro\&mtype=$mtype\&msys=$msys\&sr=$sr\&fec=$fec\&pids=$pids"
 #    echo "$NAME http://192.168.168.37/?src=$src&freq=$freq&pol=$pol&ro=$ro&mtype=$mtype&msys=$msys&sr=$sr&fec=$fec&pids=$pids"
 #    echo "$NAME http://192.168.168.37/%3Fsrc=$src%26freq=$freq%26pol=$pol%26ro=$ro%26mtype=$mtype%26msys=$msys%26sr=$sr%26fec=$fec%26pids=$pids"
     SRC=I
@@ -173,7 +153,7 @@ numer=$(("numer+1"))
 #    PAR=`echo "S=1|P=1|F=HTTP|U=192.168.168.37/%3Fsrc=$src%26freq=$freq%26pol=$pol%26ro=$ro%26mtype=$mtype%26msys=$msys%26sr=$sr%26fec=$fec%26pids=$pids|A=80"`
 #    PAR=`echo "S=1|P=1|F=HTTP|U=192.168.168.37/?src=$src&freq=$freq&pol=$pol&ro=$ro&mtype=$mtype&msys=$msys&sr=$sr&fec=$fec&pids=$pids|A=80"`
 #    PAR=`echo "S=1|P=1|F=CURL|U=http%3A//${IP}/?src=$src&freq=$freq&pol=$pol&ro=$ro&mtype=$mtype&msys=$msys&sr=$sr&fec=$fec&pids=$pids|A=$APAR"`
-    PAR=`echo "http%3A//${IP}/?src=$src&freq=$freq&pol=$pol&ro=$ro&mtype=$mtype&msys=$msys&sr=$sr&fec=$fec&pids=$pids"`
+   # PAR=`echo "http%3A//${IP}/?src=$src&freq=$freq&pol=$pol&ro=$ro&mtype=$mtype&msys=$msys&sr=$sr&fec=$fec&pids=$pids"`
 
     FREQ=$COUNT
 
