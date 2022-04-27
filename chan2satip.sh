@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # input and output filenames
-INFILENAME=S19.2E_short.conf
-OUTFILENAME=chan_satip_xml.xml
+INFILENAME=channels.conf
+OUTFILENAME=chan_sat_ip_xml.xml
 
 # SAT>IP server configuration
 #IP=192.168.1.1.113
@@ -36,12 +36,10 @@ EPAR=1
 
 IFS=":"
 
-echo "<?xml version="1.0" encoding="UTF-8"?><channelTable msys="DVB-S">" >> chan_sat_ip.xml
-
 if [ -f $OUTFILENAME ]; then
     rm $OUTFILENAME
 fi
-
+echo "<?xml version="1.0" encoding="UTF-8"?><channelTable msys="DVB-S">" >> $OUTFILENAME
 while read NAME FREQ PAR SRC SR VPID APID TPID CAID SID NID TID RID
 do
     if [ M$NAME == M ]
@@ -135,7 +133,7 @@ do
 if [ M$NAME == M ]
 numer=$(("numer+1"))
     then
-    echo "<channel number=\""$numer"\"><tuneType>DVB-S-AUTO</tuneType><visible>true</visible><type>tv</type><name>${NAME}</name><freq>${FREQ}</freq><pol>$pol</pol><sr>${SR}</sr><src>1</src><pids>${VPID},${APID}</pids></channel>" >> chan_sat_ip.xml
+    echo "<channel number=\""$numer"\"><tuneType>DVB-S-AUTO</tuneType><visible>true</visible><type>tv</type><name>${NAME}</name><freq>${FREQ}</freq><pol>$pol</pol><sr>${SR}</sr><src>1</src><pids>${VPID},${APID}</pids></channel>" >> $OUTFILENAME
 	continue
     fi
     pids=`echo "0,18,"$VPID";"$APID","$TPID | sed 's/[,;]/\n/g' | awk -F"=" '{print $1}' | awk '{if(NR>1)printf",%s",$1; else printf"%s",$1}END{printf"\n"}'` 
