@@ -52,15 +52,38 @@ do
     freq=$FREQ 
     sr=$SR
 
- 	declare -a Pos
-		Pos=('1' 1a 1b 1c 1d '2' 2a 2b 2c 2d '3' 3a 3b 3c 3d '4' 4a 4b 4c 4d)
+        declare -a Pos1
+		Pos1=(1 1a 1b 1c 1d)
     	declare -a Src
-		Src=(1-4)
+		Src1=1
+		declare -a Pos2
+		Pos2=(2 2a 2b 2c 2d)
+    	declare -a Src
+		Src2=2
+		declare -a Pos3
+		Pos3=(3 3a 3b 3c 3d)
+    	declare -a Src
+		Src3=3
+		declare -a Pos4
+		Pos4=(4 4a 4b 4c 4d)
+    	declare -a Src4
+		Src4=4
     case $SRC in
-	$DVBS_SOURCE$Pos )
-	    src=$Src ;;
+	$DVBS_SOURCE$Pos1 )
+	    src=$Src1 ;;
     esac
-   
+    case $SRC in
+	$DVBS_SOURCE$Pos2 )
+	    src=$Src2 ;;
+    esac
+    case $SRC in
+	$DVBS_SOURCE$Pos3 )
+	    src=$Src3 ;;
+    esac
+    case $SRC in
+	$DVBS_SOURCE$Pos4 )
+	    src=$Src4 ;;
+    esac
 
     echo $PAR | sed 's/\([A-Z]\)/\n\1/g' > par.txt
     while read P
