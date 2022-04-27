@@ -39,7 +39,7 @@ IFS=":"
 if [ -f $OUTFILENAME ]; then
     rm $OUTFILENAME
 fi
-echo "<?xml version="1.0" encoding="UTF-8"?><channelTable msys="DVB-S">" >> $OUTFILENAME
+echo '<?xml version="1.0" encoding="UTF-8"?><channelTable msys="DVB-S">' >> $OUTFILENAME
 while read NAME FREQ PAR SRC SR VPID APID TPID CAID SID NID TID RID
 do
     if [ M$NAME == M ]
@@ -185,4 +185,4 @@ numer=$(("numer+1"))
 #exit
 
 done<$INFILENAME 
-echo "</channelTable>" >> $OUTFILENAME
+echo '</channelTable>' >> $OUTFILENAME
