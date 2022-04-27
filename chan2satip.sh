@@ -10,16 +10,33 @@ IP=192.168.168.37
 
 # DVB-S satellite string to sources number
 DVBS_SOURCE1=S19.2E
+DVBS_SOURCE1a=S19.2E
+DVBS_SOURCE1b=S19.2E
+DVBS_SOURCE1c=S19.2E
+DVBS_SOURCE1d=S19.2E
 DVBS_SOURCE2=S23.5E
+DVBS_SOURCE2a=S23.5E
+DVBS_SOURCE2b=S23.5E
+DVBS_SOURCE2c=S23.5E
+DVBS_SOURCE2d=S23.5E
+DVBS_SOURCE3=S28.5E
 DVBS_SOURCE3a=S28.5E
-DVBS_SOURCE3b=S28.2E
+DVBS_SOURCE3b=S28.5E
+DVBS_SOURCE3c=S28.5E
+DVBS_SOURCE3d=S28.5E
 DVBS_SOURCE4=S13.0E
+DVBS_SOURCE4a=S13.0E
+DVBS_SOURCE4b=S13.0E
+DVBS_SOURCE4c=S13.0E
+DVBS_SOURCE4d=S13.0E
 
 # ? 
 COUNT=10
 EPAR=1
 
 IFS=":"
+
+echo "<?xml version="1.0" encoding="UTF-8"?><channelTable msys="DVB-S">" >> chan_sat_ip.xml
 
 if [ -f $OUTFILENAME ]; then
     rm $OUTFILENAME
@@ -37,20 +54,15 @@ do
     freq=$FREQ 
     sr=$SR
 
-
+ 	declare -a Pos
+		Pos=('1' 1a 1b 1c 1d '2' 2a 2b 2c 2d '3' 3a 3b 3c 3d '4' 4a 4b 4c 4d)
+    	declare -a Src
+		Src=(1-4)
     case $SRC in
-	$DVBS_SOURCE1 )
-	    src=1 ;;
-	$DVBS_SOURCE2 )
-	    src=2 ;;
-	$DVBS_SOURCE3a )
-	    src=3 ;;
-	$DVBS_SOURCE3b )
-	    src=3 ;;
-	$DVBS_SOURCE4 )
-	    src=4 ;;
+	$DVBS_SOURCE$Pos )
+	    src=$Src ;;
     esac
-    
+   
 
     echo $PAR | sed 's/\([A-Z]\)/\n\1/g' > par.txt
     while read P
