@@ -51,13 +51,13 @@ do
     sr=$SR
 
     case $SRC in
-	$P1|$P1a|$P1b|$P1c|$P1d )
+	$P1a|$P2a|$P3a|$P4a )
 	    src=1 ;;
-	$P2|$P2a|$P2b|$P2c|$P2d )
+	$P1b|$P2b|$P3b|$P4b )
 	    src=2 ;;
-	$P3|$P3a|$P3b|$P3c|$P3d )
+	$P1c|$P2c|$P3c|$P4c )
 	    src=3 ;;
-	$P4|$P4a|$P4b|$P4c|$P4d )
+	$P1d|$P2d|$P3d|$P4d )
 	    src=3 ;;
     esac
 
