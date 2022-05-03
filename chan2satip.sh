@@ -6,22 +6,22 @@ OUTFILENAME=chan_sat_ip_xml.xml
 
 # SAT>IP server configuration
 #IP=192.168.1.1.113
-P1=
+
 P1a=
 P1b=
 P1c=
 P1d=
-P2=S23.5E
+
 P2a=S23.5E
 P2b=S23.5E
 P2c=S23.5E
 P2d=S23.5E
-P3=S28.5E
+
 P3a=S28.5E
 P3b=S19.2E
 P3c=S28.5E
 P3d=S28.5E
-P4=S13.0E
+
 P4a=S13.0E
 P4b=S13.0E
 P4c=S13.0E
